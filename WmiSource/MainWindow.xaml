@@ -1,0 +1,63 @@
+﻿<Window x:Class="TheCodingMonkey.WmiDemo.Source.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TheCodingMonkey.WmiDemo.Source"
+    Title="WMI Demo Source" Height="390" Width="464" Icon="/WmiSource;component/Application.ico">
+    
+    <Window.Resources>
+        <local:CompletedToForegroundConverter x:Key="completedConverter" />
+        <local:Tasks x:Key="TodoList">
+            <local:Task Start="8/26/2010 4:45PM" End="8/26/2010 5:00PM" Name="Get Coffee at Starbucks for the Road" />
+            <local:Task Start="8/26/2010 5:00PM" End="8/26/2010 6:15PM" Name="Drive to Grayslake" />
+            <local:Task Start="8/26/2010 6:15PM" End="8/26/2010 6:30PM" Name="Try to Find LCNUG and Call for Help" />
+            <local:Task Start="8/26/2010 6:30PM" End="8/26/2010 7:00PM" Name="Eat Pizza" />
+            <local:Task Start="8/26/2010 7:00PM" End="8/26/2010 8:20PM" Name="Application Instrumentation with WMI" />
+            
+            <local:HighPriorityTask Start="8/26/2010 8:20PM" End="8/26/2010 8:30PM" Name="Appease Hecklers" />         
+        </local:Tasks>
+    </Window.Resources>
+    
+    <Grid Name="_gridAddObject" DataContext="{StaticResource TodoList}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="Auto" MinHeight="23" />
+            <RowDefinition Height="Auto" MinHeight="23" />
+            <RowDefinition Height="Auto" MinHeight="23" />
+            <RowDefinition Height="Auto" MinHeight="23" />
+            <RowDefinition Height="Auto" MinHeight="23" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70" />
+            <ColumnDefinition Width="145*" />
+            <ColumnDefinition Width="145*" />
+        </Grid.ColumnDefinitions>
+        
+        <ListBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Name="_lstWmiObjects" 
+                 ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" Margin="5,0,0,0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Foreground="{Binding Path=Completed, Converter={StaticResource completedConverter}}">
+                        <TextBlock Text="{Binding Path=Name}" /> (Duration: <TextBlock Text="{Binding Path=Duration}" />)
+                    </TextBlock>                    
+                </DataTemplate>                
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">Details:</Label>
+        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Name:</Label>
+        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Task ID:</Label>
+        <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Date Range:</Label>
+        
+        <TextBox Grid.Row="2" Grid.Column="1" Name="_txtName" Text="{Binding Path=Name}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0" />
+        <TextBlock Grid.Row="2" Grid.Column="2" Margin="5,0,0,0" Padding="2" VerticalAlignment="Center"><TextBlock Text="{Binding Path=Reminders}" /> Reminders</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Path=TaskId}" VerticalAlignment="Center" Margin="5,0,0,0" />
+        <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding Path=Completed}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0">Completed</CheckBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Start}" VerticalAlignment="Center" Margin="5,0,0,0" />
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=End}" VerticalAlignment="Center" Margin="5,0,0,0" />
+        
+        <Button Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2" HorizontalAlignment="Center" Click="Reminder_Click">Reminder!</Button>
+        <Button Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Padding="2" HorizontalAlignment="Center" Click="AddTask_Click">Add Task</Button>
+        <Button Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Padding="2" HorizontalAlignment="Center" Click="RemTask_Click">Remove Task</Button>
+        
+    </Grid>
+</Window>
